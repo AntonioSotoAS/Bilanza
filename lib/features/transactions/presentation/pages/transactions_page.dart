@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class DebtsPage extends StatelessWidget {
-  const DebtsPage({super.key});
+class TransactionsPage extends StatelessWidget {
+  const TransactionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Deudas'),
+        child: Text('Movimientos'),
       ),
     );
   }
