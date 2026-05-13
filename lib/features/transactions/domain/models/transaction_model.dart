@@ -1,7 +1,4 @@
-import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
-
-part 'transaction_model.g.dart';
 
 enum TransactionType {
   sale,
@@ -9,22 +6,61 @@ enum TransactionType {
   personalWithdrawal,
 }
 
-@collection
+/// Modelo de dominio para Transaction
+/// Este es el modelo de negocio puro, independiente de la BD
 class Transaction {
-  Id id = Isar.autoIncrement;
-  late String uuid;
-  late String description;
-  late double amount;
-  late TransactionType type;
-  late DateTime date;
+  final String id;
+  final String description;
+  final double amount;
+  final TransactionType type;
+  final DateTime date;
 
   Transaction({
+    String? id,
     required this.description,
     required this.amount,
     required this.type,
     DateTime? date,
+  })  : id = id ?? const Uuid().v4(),
+        date = date ?? DateTime.now();
+
+  // Para copiar con cambios
+  Transaction copyWith({
+    String? id,
+    String? description,
+    double? amount,
+    TransactionType? type,
+    DateTime? date,
   }) {
-    this.date = date ?? DateTime.now();
-    uuid = const Uuid().v4();
+    return Transaction(
+      id: id ?? this.id,
+      description: description ?? this.description,
+      amount: amount ?? this.amount,
+      type: type ?? this.type,
+      date: date ?? this.date,
+    );
   }
+
+  @override
+  String toString() =>
+      'Transaction(id: $id, description: $description, amount: $amount, type: $type, date: $date)';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Transaction &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          description == other.description &&
+          amount == other.amount &&
+          type == other.type &&
+          date == other.date;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      description.hashCode ^
+      amount.hashCode ^
+      type.hashCode ^
+      date.hashCode;
 }
